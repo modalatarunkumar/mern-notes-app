@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const API_BASE_URL = "http://localhost:5000/api/v1/notes"; 
+// const API_BASE_URL = "http://localhost:5000/api/v1/notes"; 
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function App() {
   const [notes, setNotes] = useState([]);

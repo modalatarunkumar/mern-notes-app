@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 // implementing cors
-const allowedOrigin = "https://mern-notes-app-eta.vercel.app/";
+const allowedOrigin = "https://mern-notes-app-eta.vercel.app";
 
 app.use(cors({
     origin: allowedOrigin,

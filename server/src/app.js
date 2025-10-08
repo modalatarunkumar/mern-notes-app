@@ -6,7 +6,14 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
-app.use(cors())
+// implementing cors
+const allowedOrigin = "https://mern-notes-app-eta.vercel.app/";
+
+app.use(cors({
+    origin: allowedOrigin,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+}))
+// if downloaded remove lines from implementing cors and make app.use(cors())
 
 app.use("/api/v1", routes);
 

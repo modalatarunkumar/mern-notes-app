@@ -9,7 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 // implementing cors
-const allowedOrigins = [config.FRONT_END_URL, "http://localhost:3000"];
+
+const allowedOrigins = [config.FRONTEND_URL, "http://localhost:3000"];
 
 app.use(cors({
     origin: function(origin, callback) {

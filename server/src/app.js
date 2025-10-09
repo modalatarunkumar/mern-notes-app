@@ -10,6 +10,7 @@ app.use(express.urlencoded({extended:true}))
 
 // implementing cors
 const allowedOrigins = [config.FRONT_END_URL, "http://localhost:3000"];
+
 app.use(cors({
     origin: function(origin, callback) {
         if(!origin || allowedOrigins.includes(origin)){

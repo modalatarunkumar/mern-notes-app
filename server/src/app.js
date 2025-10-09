@@ -1,19 +1,26 @@
 import express from "express";
 import cors from "cors";
 import routes from "./routes/index.js";
+import config from "./config/index.js";
+
 const app = express()
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 // implementing cors
-const allowedOrigin = "https://mern-notes-app-eta.vercel.app";
-
+const allowedOrigins = [config.FRONT_END_URL, "http://localhost:3000"];
 app.use(cors({
-    origin: allowedOrigin,
+    origin: function(origin, callback) {
+        if(!origin || allowedOrigins.includes(origin)){
+            callback(null, true);
+        }else{
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"]
 }))
-// if downloaded remove lines from implementing cors and make app.use(cors())
+
 
 app.use("/api/v1", routes);
 

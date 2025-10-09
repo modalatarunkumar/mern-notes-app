@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { toast, Toaster } from "react-hot-toast";
 
 // const API_BASE_URL = "http://localhost:5000/api/v1/notes"; 
 
@@ -9,38 +10,81 @@ function App() {
   const [notes, setNotes] = useState([]);
   const [form, setForm] = useState({ title: "", description: "" });
   const [editingId, setEditingId] = useState(null); // Track which note is being edited
+  const [loadingFetch, setLoadingFetch] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(false);
 
 
   const fetchNotes = async () => {
+    setLoadingFetch(true)
     const res = await axios.get(API_BASE_URL);
-    console.log(res.data.notes)
+    
     setNotes(res.data.notes);
+    setLoadingFetch(false)
   };
 
   const createNote = async () => {
-    if (!form.title || !form.description) return alert("Fill all fields");
-    await axios.post(API_BASE_URL, form);
-    setForm({ title: "", description: "" });
-    fetchNotes();
+    if (!form.title || !form.description) return toast.error("Please fill all fields");
+    try{
+      setLoadingAction(true);
+      toast.loading("Creating note... ")
+      await axios.post(API_BASE_URL, form);
+      toast.dismiss()
+      toast.success("Note added!");
+      setForm({ title: "", description: "" });
+      await fetchNotes();
+      
+    }
+    catch(err){
+      toast.error("failed to add note")
+    }
+    finally{
+      setLoadingAction(false);
+    }
   };
   // Prepare form for editing
   const editNote = (note) => {
     setForm({ title: note.title, description: note.description });
     setEditingId(note._id);
   };
+  const cancelEdit = () =>{
+    setForm({title:"", description:""});
+    setEditingId(null)
+  }
 
   // Update an existing note
   const updateNote = async () => {
     if (!editingId) return;
-    await axios.put(`${API_BASE_URL}/${editingId}`, form);
-    setForm({ title: "", description: "" });
-    setEditingId(null);
-    fetchNotes();
+    try{
+      setLoadingAction(true);
+      toast.loading("updating note...");
+      await axios.put(`${API_BASE_URL}/${editingId}`, form);
+      toast.dismiss()
+      toast.success("Updated successfully");
+      setForm({ title: "", description: "" });
+      setEditingId(null);
+      await fetchNotes();
+    }
+    catch(error){
+      toast.error("failed to update note");
+    } finally{
+      setLoadingAction(false);
+    }
   };
 
   const deleteNote = async (id) => {
-    await axios.delete(`${API_BASE_URL}/${id}`);
-    fetchNotes();
+    try {
+      setLoadingAction(true);
+      toast.loading("Deleting")
+      await axios.delete(`${API_BASE_URL}/${id}`);
+      toast.dismiss()
+      toast.success("Note deleted!")
+      await fetchNotes();
+    } catch (error) {
+      toast.error("Failed to delete note")
+    }
+    finally{
+      setLoadingAction(false);
+    }
   };
 
   useEffect(() => { fetchNotes(); }, []);
@@ -60,17 +104,19 @@ function App() {
         onChange={(e) => setForm({ ...form, description: e.target.value })}
         style={{ width: "100%", height: "80px", padding: "8px" }}
       />
-    {editingId ? (
-        <button onClick={updateNote} style={{ marginTop: "10px" }}>
-          Update Note
+    {editingId ? (<>
+        <button onClick={updateNote} style={{ marginTop: "10px" }} disabled={loadingAction}>
+          {loadingAction? "updating..." : "Update Note"}
         </button>
+        <button onClick={cancelEdit} disabled={loadingAction} >Cancel</button>
+        </>
       ) : (
-        <button onClick={createNote} style={{ marginTop: "10px" }}>
-          Add Note
+        <button onClick={createNote} style={{ marginTop: "10px" }} disabled={loadingAction}>
+          {loadingAction? "saving..." : "Add Note" }
         </button>
       )}
       <ul style={{ marginTop: "20px", listStyle: "none", padding: 0 }}>
-        {notes && notes.map((n) => (
+        {loadingFetch? <p>Loading... </p>: <>{notes && notes.map((n) => (
           <li 
           key={n._id}
           style={{
@@ -84,8 +130,9 @@ function App() {
             <button onClick={() => editNote(n)}>Edit</button>
             <button onClick={() => deleteNote(n._id)}>Delete</button>
           </li>
-        ))}
+        ))}</>}
       </ul>
+      <Toaster />
     </div>
   );
 }

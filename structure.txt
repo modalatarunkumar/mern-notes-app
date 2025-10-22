@@ -1,0 +1,12 @@
+MERN-CRUD
+  ├── client/
+        ├── src/
+  ├── server/
+        ├── src/
+            ├── config/
+            ├── controllers/
+            ├── models/
+            ├── routes/
+            ├── service/
+            ├── app.js
+          server.js

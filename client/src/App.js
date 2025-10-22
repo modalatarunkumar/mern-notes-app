@@ -34,8 +34,9 @@ function App() {
       await fetchNotes();
       
     }
-    catch(err){
-      toast.error("failed to add note")
+    catch(error){
+      toast.dismiss()
+      toast.error(error?.response?.data?.message || "failed to add note")
     }
     finally{
       setLoadingAction(false);
@@ -65,12 +66,13 @@ function App() {
       await fetchNotes();
     }
     catch(error){
-      toast.error("failed to update note");
+      toast.dismiss();
+      toast.error(error?.response?.data?.message || "failed to update note");
     } finally{
       setLoadingAction(false);
     }
   };
-
+  
   const deleteNote = async (id) => {
     try {
       setLoadingAction(true);
@@ -79,7 +81,12 @@ function App() {
       toast.dismiss()
       toast.success("Note deleted!")
       await fetchNotes();
+      if(id === editingId){
+        setEditingId(null)
+        setForm({title: "", description: ""})
+      }
     } catch (error) {
+      toast.dismiss()
       toast.error("Failed to delete note")
     }
     finally{
@@ -116,7 +123,7 @@ function App() {
         </button>
       )}
       <ul style={{ marginTop: "20px", listStyle: "none", padding: 0 }}>
-        {loadingFetch? <p>Loading... </p>: <>{notes && notes.map((n) => (
+        {loadingFetch? <p>Loading... </p>: <>{notes && notes.length > 0 ? (notes.map((n) => (
           <li 
           key={n._id}
           style={{
@@ -130,7 +137,7 @@ function App() {
             <button onClick={() => editNote(n)}>Edit</button>
             <button onClick={() => deleteNote(n._id)}>Delete</button>
           </li>
-        ))}</>}
+        ))): <p>no notes</p>}</>}
       </ul>
       <Toaster />
     </div>

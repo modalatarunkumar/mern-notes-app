@@ -7,6 +7,9 @@ import app from "./src/app.js";
         const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
         await mongoose.connect(config.MONGODB_URI, clientOptions);
         console.log("DB connected successfully")
+        mongoose.connection.on("disconnected", () => console.log("MongoDB disconnected"));
+        mongoose.connection.on("error", (err) => console.error("MongoDB error:", err));
+
         
         app.on("error", (error) => {
             console.error("Error on app connecting db: ", error)

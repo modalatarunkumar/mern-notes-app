@@ -4,7 +4,7 @@ const notesSchema = mongoose.Schema({
     title: {
         type: String,
         required: [true, "Title is required"],
-        maxLength: [50, "Title should not exceed fifty characters"]
+        maxLength: [50, "Title should not exceed 50 characters"]
     },
     description : {
         type: String,
@@ -15,7 +15,10 @@ const notesSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    deletedAt: Date
+    deletedAt: {
+        type:Date,
+        default: null
+    }
     
 }, {timestamps:true})
 

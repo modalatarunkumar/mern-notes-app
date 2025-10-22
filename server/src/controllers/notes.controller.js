@@ -37,7 +37,7 @@ export const updateNotes = asyncHandler(async (req, res) => {
     }
     // get notes from db
     
-    const notes = await Notes.findById(notesId);
+    const notes = await Notes.findOne({_id:notesId, isDeleted:false});
 
     if(!notes){
         throw new CustomError("Notes not found to update", 400)
@@ -85,12 +85,11 @@ export const deleteNotes = asyncHandler(async (req, res) => {
 })
 
 export const getAllNotes = asyncHandler(async (_req, res) => {
-    const notes = await Notes.find({isDeleted:false});
-    // console.log(notes)
-    // const titles = notes.map((note) => {return ({"_id":note._id,"title":note.title})})
-    // console.log(titles)
-    if(!notes){
-        throw new CustomError("There is no notes", 400);
+    const notes = await Notes.find({isDeleted:false}, "id title description isDeleted");
+    
+    
+    if(notes.length === 0){
+        return res.status(200).json({success: true, notes:[]})
     }
     res.status(200).json({
         success: true,

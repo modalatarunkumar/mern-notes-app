@@ -35,20 +35,16 @@ To start the backend server, run:
 ```bash
 npm run dev
 ```
-This will start the backend server at `http://localhost:3000`.
-after that run `npm i` command to install packages.
+This will start the backend server at `http://localhost:5000`.
 
-run the development server by using command `npm run dev`
-
-this will run backend.
 
 ### API end points:
 Some of the key endpoints (example):
 
-`GET /api/notes:` Fetch all notes
-
-`POST /api/notes:` Create a new note
-
-`PUT /api/notes/:id:` Update a note
-
-`DELETE /api/notes/:id:` Delete a note
+| Method     | Endpoint            | Description          |
+| ---------- | ------------------- | -------------------- |
+| **POST**   | `/api/v1/notes`     | Create a new note    |
+| **GET**    | `/api/v1/notes`     | Get all active notes |
+| **GET**    | `/api/v1/notes/:id` | Get a note by ID     |
+| **PUT**    | `/api/v1/notes/:id` | Update a note        |
+| **DELETE** | `/api/v1/notes/:id` | Soft delete a note   |

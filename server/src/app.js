@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import routes from "./routes/index.js";
 import config from "./config/index.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 const app = express()
 
@@ -24,6 +25,10 @@ app.use(cors({
 }))
 
 
+app.get("/", (_req, res) => {
+    res.send("Hello there tarun kumar - api");
+})
+
 app.use("/api/v1", routes);
 
 
@@ -34,8 +39,5 @@ app.use((_req, res) => {
     })
 })
 
-app.use("/", (_req, res) => {
-    res.send("Hello there tarun kumar - api");
-})
-
+app.use(errorHandler);
 export default app;

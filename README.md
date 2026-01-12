@@ -4,6 +4,14 @@ A simple and beginner-friendly Notes CRUD Application built with the MERN stack 
 
 This app lets users create, edit, delete, and view notes — demonstrating the fundamentals of full-stack web development.
 
+## 🤔 Why This Project
+
+I built this project to learn and demonstrate **full-stack development with the MERN stack** in a simple, practical application.
+
+The goal was to create a **CRUD-based notes app** that handles **creating, updating, deleting, and fetching notes** with proper backend validation, error handling, and modular architecture.
+
+This project helped me practice **frontend-backend integration**, API design, and **deployment of production-ready apps** with Vercel and Render, while keeping the code organized and maintainable.
+
 ## ✨ Features
 
 - ➕ Create notes with title and description
